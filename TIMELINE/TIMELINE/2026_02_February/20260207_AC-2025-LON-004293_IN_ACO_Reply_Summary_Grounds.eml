@@ -1,0 +1,654 @@
+Received: from LO0P265MB5841.GBRP265.PROD.OUTLOOK.COM (::1) by
+ CWXP265MB3383.GBRP265.PROD.OUTLOOK.COM with HTTPS; Fri, 6 Feb 2026 12:57:19
+ +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=MMuIT+RB9otAom0xw9UpCsijLHwmAKlza8QuQBn3+0VcGl9LricslX74F1feyrkgTYN5L12PpBOTwv7VX0JLDt7HrYZCyWlI8u75FpuFiO7lSSIpsoCK+YAk2ph853ptJwvskAz7yxDKvbD8mo4W7NWo+pH68OaXfNW7LwFG2XKtkYicXs6H/PM56lI4IrAmkXDeIO74hqdPptrXDPD8b6hHcypSWsDVFZkmI1uqs5yYlFdL4aYYOL10E8sofKafvtk9qBAD0rVQ5mM1Tv0LXW/hM2UFnUMvDwZ/O8Oue/6YaZcOim0OPVbUm/hPeIVan0e6kjWwyM0m1cgTSen56A==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NCE9SgFKqZgFvYC1GaXhbnQ/9EUEEhudz8Uc27FrbX4=;
+ b=OJfdynMuWXcxtZwtEp7sV4PKA0ljMuCKkvPq/QR5zjxOIhPa4LR6bIEdLlg4zC7WWhRMosXUIhNjMgZMVS5Ezo1kkEI11MQkAZX+dqcAoIov1aMdplYdwGLEygIpW/JfxcBPK6R+0rUMHM7hbMMZ5PY7CEvUMKkF7dbBmS40o2zaBKvOGKCn2Wj1Y1kNteZUbNP81ehVd/xy+lQX7P1d9k9n3B231GAmXEjaYUjNzHBThakD+4ZbloUsfJnvzs9WsyZHUIh6T6nGOkC9bxwwT5f4Rp+NfPoJG2MsKo7WGtWNGuCdvuTuP0T6RpIJMzAZV7+gwhuOMXPVr870y6A9rg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 2a01:111:f403:c206::1) smtp.rcpttodomain=rosekross.com
+ smtp.mailfrom=justice.gov.uk; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=justice.gov.uk; dkim=pass (signature was verified)
+ header.d=justice.gov.uk; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=justice.gov.uk] dkim=[1,1,header.d=justice.gov.uk]
+ dmarc=[1,1,header.from=justice.gov.uk])
+Received: from LO2P265CA0172.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:a::16) by
+ LO0P265MB5841.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:266::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9587.15; Fri, 6 Feb 2026 12:56:17 +0000
+Received: from LN2PEPF000100CD.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a:cafe::c2) by LO2P265CA0172.outlook.office365.com
+ (2603:10a6:600:a::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.15 via Frontend Transport; Fri,
+ 6 Feb 2026 12:56:19 +0000
+Authentication-Results: spf=pass (sender IP is 2a01:111:f403:c206::1)
+ smtp.mailfrom=justice.gov.uk; dkim=pass (signature was verified)
+ header.d=justice.gov.uk;dmarc=pass action=none
+ header.from=justice.gov.uk;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of justice.gov.uk
+ designates 2a01:111:f403:c206::1 as permitted sender)
+ receiver=protection.outlook.com; client-ip=2a01:111:f403:c206::1;
+ helo=CWXP265CU008.outbound.protection.outlook.com; pr=C
+Received: from CWXP265CU008.outbound.protection.outlook.com
+ (2a01:111:f403:c206::1) by LN2PEPF000100CD.mail.protection.outlook.com
+ (2603:10a6:608:1::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.10 via Frontend Transport; Fri,
+ 6 Feb 2026 12:56:16 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=aIE6XjP4rIzIfksAWXtU5fNt2UVKG+CszH36iFX29DjlPJ4pnhSIEKRmlmOk+FrR96/i0vDXw4v2bcTqxYvgrsZrZ2UyFi1g0+Qm+9syiDMu1aWR9tT/vZB0KHnKZw71pdTge33Ykag8aUCh6oSim23UPXQrekR2cpJzd6+H10fclE+pHT8wZr3Pm/5f9Q9JWhfL+qrIrSvqaWXY/8ALynSKq2Sd/P7F59MvY7slpRmivg3PBb/HmPKB8XPZNl+j7fW7DjmeE7ZbU818PMPfLX5CHTAiscBs/73KekZfuNipZyW+Ww8Bw+ZGQvZ/a+jA55T7CmR/8A2uDLxAgvAh3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NCE9SgFKqZgFvYC1GaXhbnQ/9EUEEhudz8Uc27FrbX4=;
+ b=Qa1/1zjFxUWYM5yz6KnZQkTySXHQTgPv//L+Ri6pfKDvmJv/XEMcR8YGpczQ+Z2XultcmdhtYa9h96rpkK5cYXrrjDAKuNOZRpTctIz1qKKsalLAqJ+QxmQ9cdCZe3ArQkw19KFLVdD5uYBZ6OWOPfPOnGtrUMddSfzfH/RY/rRPVfh2vMSOMuZGTohWaGpwDbD5rAI8z/TS4IONAuQkSjAw0poHjYbd4CS1bCsw/fwrKgY4yvlZsHMGCOA/sTC+fXrcCCZ7h26bugOlnzNVc4/VUWBW956C537XbFWvmiyEn/Q+skhCSYoS04KqPs6MB59N6bZuHN5Ea5UKuMR9Xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=justice.gov.uk; dmarc=pass action=none
+ header.from=justice.gov.uk; dkim=pass header.d=justice.gov.uk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=justice.gov.uk;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NCE9SgFKqZgFvYC1GaXhbnQ/9EUEEhudz8Uc27FrbX4=;
+ b=d9pLDx3AGzwGnCieByRs2yGosdkft//rIkBsZephoTBOq2o9y6NscvsB0tq3u1mE23iV48+0a5X6fGAwDVUjas/DicJEMY9I9Dxa/fZmgFfPoCcjYB2xBPN4bBvWs4BUMOiwUPhGyX4y062cEtlQH8uVeGKHDS7P1pDjDY/ZwYs=
+Received: from CWLP123MB5523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:166::9)
+ by LO0P123MB7153.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:333::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.15; Fri, 6 Feb
+ 2026 12:56:05 +0000
+Received: from CWLP123MB5523.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::4a09:56af:6bdf:d08c]) by CWLP123MB5523.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::4a09:56af:6bdf:d08c%6]) with mapi id 15.20.9587.013; Fri, 6 Feb 2026
+ 12:56:05 +0000
+From: "Administrative Court Office, Case Progression"
+	<administrativecourtoffice.caseprogression@justice.gov.uk>
+To: 'Nadia' <nadia@rosekross.com>
+CC: "Roisin.HedigerHoward@governmentlegal.gov.uk"
+	<Roisin.HedigerHoward@governmentlegal.gov.uk>, "justicecom@parliament.uk"
+	<justicecom@parliament.uk>
+Subject:
+ =?utf-8?B?UkU6IEFDLTIwMjUtTE9OLTAwNDI5MyDigJMgQ2xhaW1hbnTigJlzIFJlcGx5?=
+ =?utf-8?B?IHRvIERlZmVuZGFudOKAmXMgU3VtbWFyeSBHcm91bmRz?=
+Thread-Topic:
+ =?utf-8?B?QUMtMjAyNS1MT04tMDA0MjkzIOKAkyBDbGFpbWFudOKAmXMgUmVwbHkgdG8g?=
+ =?utf-8?B?RGVmZW5kYW504oCZcyBTdW1tYXJ5IEdyb3VuZHM=?=
+Thread-Index: AQHckbsA6RoqGaQdG0ms4NpUufTIHrV1qzow
+Date: Fri, 6 Feb 2026 12:56:05 +0000
+Message-ID:
+ <CWLP123MB55232587163BE45E752249C2B566A@CWLP123MB5523.GBRP123.PROD.OUTLOOK.COM>
+References: <50DF2187-3A64-4D8A-8C04-E9E08316E0B0@rosekross.com>
+In-Reply-To: <50DF2187-3A64-4D8A-8C04-E9E08316E0B0@rosekross.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=justice.gov.uk;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-traffictypediagnostic:
+ CWLP123MB5523:EE_|LO0P123MB7153:EE_|LN2PEPF000100CD:EE_|LO0P265MB5841:EE_|CWXP265MB3383:EE_
+X-MS-Office365-Filtering-Correlation-Id: b4ffece4-74bb-4e2b-47f2-08de657f1ddc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|6049299003|366016|1800799024|376014|7053199007|38070700021|13003099007|4013099003|4053099003|8096899003;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?3YlJ99mfuuR/zB4oU89YsLeLipXUuXTgqMMSlcuDz7W1EobnSLcoWP6oTvqp?=
+ =?us-ascii?Q?7ejWaFJNw6pe7HfHtm1KG24sufCCQHCLcwpePxDOh4/0uU8McCACTSkZX6tu?=
+ =?us-ascii?Q?vbpPOhs3xQOC8oMcRdYYzlgX+kmU3lNxLIvJ3rHvLogWwAz2naLoD+5eI3YG?=
+ =?us-ascii?Q?QV9s7s/jvKAsbOZl5G4IOwbYWPk6TBNbgS2GviKwY3qLeUsTPQNSttZk70Cv?=
+ =?us-ascii?Q?zjR1texqGo0ARhUHWY4uA3gUHuUVilGGpjLqyxTaS0jhEwOVUtd2qiZkwy2g?=
+ =?us-ascii?Q?PF/y6AhjIEx1dzkL3jcEK7z4xWo8TI/LJlg32GTBdPCP+RsrgaCHSAeqvAEK?=
+ =?us-ascii?Q?GgZBFbrSUGVQVpvhUksbN9luvZItPvCTpqylcMLuw9yrOgdxEIlW/acf5vxH?=
+ =?us-ascii?Q?hY1vaIafykIcVGdHYeRl9ARNZj4oQfxFQbF0sOehWo+qxsVRmD5FlxMbv3Ot?=
+ =?us-ascii?Q?xi/2EfQMX5g326oZLvM7JrLuV/Ep9O/zHC58Zj1DnKg2Hfk/vlE5pD++Z42u?=
+ =?us-ascii?Q?oHws2/j1l6Ysqwvp4S7pTpQNF61Y5/CQwkZ+RsiMKY9uRoWJAKgbHJkgotBD?=
+ =?us-ascii?Q?cxrEGu1B7A8LYf+xmuFA95IvY13SgsPlLXjAcJ9YHmbrk5j5Ft9Tf5j2kME7?=
+ =?us-ascii?Q?aIRIbri7uXM9Pum3mBPr6QvKDtFaxqR3A25kXtP6KKYn8p1Ix71Z4nk4WL/V?=
+ =?us-ascii?Q?tV4E1ccWCpUna0Bjqit4FHSyd5caLu4LnIwy6zLF672lDFujty0uMlonv34U?=
+ =?us-ascii?Q?MLgD4jROhCJbCldQh1rPBWfR6Wp0t/yI4dp98jVhgyp07LwccwA0dgc1LhSI?=
+ =?us-ascii?Q?qIg3m37WXqezoM8k7Mw75E1vUN7PCJh0qdJGygcePL4A45Kx1lx1blcg+Suf?=
+ =?us-ascii?Q?AqBlgY1w538pmb2DRP76GJQUwS7JEBkcfhZOkgiMrCIWXIWnOuyRpGUFBCOL?=
+ =?us-ascii?Q?C+At0cmoy5rlOWEt9IGN+K/4gv+xEG7d79quHBIogKNRtdWo7DQyYn86c8/l?=
+ =?us-ascii?Q?njlp/H+74bqavJmvNO3ugQRK8eFI6mFbgTY0wUoZ9iOYoX7KqmEHfQINNcEn?=
+ =?us-ascii?Q?ArigDWldFPcMJU3PN9oZPaP0SD6OnxaoY05gGvtv2sL4dP9sOM2iaN2/KuYQ?=
+ =?us-ascii?Q?XdjLHiOg8a5G+BVpU4o7/1lL/N6LQoowl/KvetrZ3oKmexy2ZBpuEOx/FcT2?=
+ =?us-ascii?Q?L47C2jO9idlWgIteLdofEAf6GFDPoP2tkAetgD7rUYY2lqG9EY+fgSIxk0h2?=
+ =?us-ascii?Q?nneriDPvYKUs7sTae4PgsphBaL30U6qFiprc+3F4HaUW0BctDexC5EHWBbHN?=
+ =?us-ascii?Q?5/SY8epBDhNytXPFbogjxtl3XxyBG0xT6ZDRJ/kzrGfUNk3t9GE3OZ9jtm3w?=
+ =?us-ascii?Q?qpqLxRfv08gaOPSF1eynYGn6o8hKeFy41M2aP0TJjp4r2AuvOZFReujFF9xt?=
+ =?us-ascii?Q?SkioCz6HA30edldEMYqalxMCUJ5zN6FryImfjYRuYzOIVZlYNrX/WLZnx9ME?=
+ =?us-ascii?Q?qugeU2cRdWwld3n7QLAHMW+ZzIdMPZRwhyBO+TSh6ZvATAAGn9GtXH4hiA?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB5523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(6049299003)(366016)(1800799024)(376014)(7053199007)(38070700021)(13003099007)(4013099003)(4053099003)(8096899003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-Original-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-Original-0:
+ =?utf-8?B?RzBQOXlSQnBGVFZkbExZckNuVFU5ZTVZQ1hFSjFVcWNxaGZTSnFqK0k5U0Vm?=
+ =?utf-8?B?dkZXYy9LVG9zR0pVKzVYVDlNYVhFZW56U0tGVHZFVmhGRzRkVVNpWWZSb3ox?=
+ =?utf-8?B?cjRCMXJMNGs4dlVJL3Z6Rktod2syam9YWTZjZjlnSDlKTmJJZVV6WWVvbUlY?=
+ =?utf-8?B?bWI3ZTBpNGplaGhndFNralcxQkJBaXBUT2cwbmxaMWF3WXJEVGtnVU9kamlN?=
+ =?utf-8?B?QnpVQlFRT1dyVGpXTW5EeHpnNHVBYVlPNlRGN0RZUmhJK3BQMTBINWduUWRp?=
+ =?utf-8?B?eVFzb1VRQ3ZoNCt5ZWs1U2FJQVM5NWQySWZ4NHpaSTl5TGxWYk03QmZydW4z?=
+ =?utf-8?B?Yk9kU0RYV2JxZFZRQjdOZkZIdk11OWYwNGNnS3F1UmJJZllXaFlLMVpYYk9l?=
+ =?utf-8?B?eHUwa1JWejQrS1o3b05iVjZRbDlsWXZmYkw2VmJsYlIyU0RCWEo1MThiMmxM?=
+ =?utf-8?B?RXJuZzFZOFVib3VNcm5iVkpKd1JyVzBRdU4vSnlxa3h4L3k3SlNwK0lGVnJE?=
+ =?utf-8?B?Q2xWSjQrdmV6clNrWmZwa1RUdTUwdTRqZVlPMmVkb1NBOSsraVRMenhmdTRT?=
+ =?utf-8?B?VENsRVhqekhHMjdpc2toN1ZVMDcxTVNQMjVKZjVSSHh4cUpNcnR0TnZScHdX?=
+ =?utf-8?B?UlowNjZ2dDJUam9GYWcrZmNMUDhtblRORGxkUjUrdEdObmtaMnQvUzVWSkZo?=
+ =?utf-8?B?Rm1hR3ZmcVhHa1VqUXhMa0t5SlRoUzhucVpxYXFiNXRnK2FCVFZBL1Q3ZjEy?=
+ =?utf-8?B?bWRvNS9TQjl6eURDYnlqOFBnQmRXclFHWEpuVkZDcGF4cmVkS2V0UkU2akFK?=
+ =?utf-8?B?VmdBZENIL0VleE5HSVcvNGNCdTNtOXdnQzFWR2dvTDVLRVZWRkNLaytsSTU3?=
+ =?utf-8?B?S2FIR0NhdkpxQ0FibStIRGVmWS9UeWFOa01FbmJnNE1ZaXpaTFVDQzg3Z0s2?=
+ =?utf-8?B?Umw4TzdNSUJ3MzIvWTFMaUdYZEZlNzROUC9DcmxjMitiblBoNEoxVXNnUmUz?=
+ =?utf-8?B?VTRVbll5RGRXdEpEaDVtMFphSStCb2s5T3ZoV24rdm9jaGxCUUlpRFZML2wx?=
+ =?utf-8?B?M21wOW5JOVFUWUtJRTA1UXU5Nm5jcVJNKzhFOEZNNWY5ZE50OXc0ZUNITVMx?=
+ =?utf-8?B?SWVBbG5tS2lHUFNJZ3k1bUNpY0dDUDlhd2wrMHlXY2pHQkZDeEtiWkNZTzZ5?=
+ =?utf-8?B?M3ZWUWoraUFWcGFwcmgzaFphdUZzNlFZeEZLQkRVMUFPdDBEZGVmcGt1dk12?=
+ =?utf-8?B?S2FvSmplUytIL3VLR1loNFp0d05SQS9CeE1RQ3lQSnc0Y2JmM2RCYnJMeHhT?=
+ =?utf-8?B?YkU3Z0FUMnJRWm5yYzdnaE1laXZmbFdxUGIySS9HQlcvVllZOU5vZ0RmVDJv?=
+ =?utf-8?B?clhtNE1rYmoxTEJnVmllSHVwWm02UENTb0NTNnBVTjFkYVFOeSt4S1V0dW54?=
+ =?utf-8?B?eFJ3UWtIcE1NVlcxYmxqdGdnVjhPWmZ1VVZRSnVnbFQ5RzQyRkJjNEVJU3A5?=
+ =?utf-8?B?WFdzWHZyNGY4bXNNYkNJaWVhVXB2Qlh5ZUZwT2JKQ09lQlhFVWQzcnBQVk81?=
+ =?utf-8?B?dzUyY3VnQ2YxOTEvNDJGcE1PejhQcWNOSTQxTTMxNnZndlJHZDc5Nk8vTXgv?=
+ =?utf-8?B?REpzelNSekU1T3czYnc3U2hLcksxY0ZGSURLSFZ2RVVjMnFSQUUxc25NcjNC?=
+ =?utf-8?B?cWtKenpNZnBEWVR1UHJCejBGTUN0QXV0S210VUN6SmNWN2JpaFN4QzRYWDlx?=
+ =?utf-8?B?d1AvTjBMK3RyWGxPcndtd0drVWdkKzBxRitxc1c2UnJXejNneG5xS1k1L0F3?=
+ =?utf-8?B?QUdKbnQrRnJjZklzaE43eUhHZGZhN0k1cSttN0UrbVRDVHhPaDJJRElnOTBJ?=
+ =?utf-8?B?cEZrSW43MjRWY2tLa2xsNDRNRE1UZWdzcWhXMXQxYUpmVjVUN2prY1k4Yllp?=
+ =?utf-8?B?S1BHcmFDLzhCL2tEODJNOG5ISlA1aVNTVnEvUzBoOUtBS0hBVjZrampoSzc2?=
+ =?utf-8?B?K1hNbUMzbTRrd0hWYkxNanptWHBXYXZHaUthd2RvT0U3aGxQUk10MHBtNldZ?=
+ =?utf-8?B?cGxKcDFyYzVjdHJEN3ozbmcyQVQrSXkyV1Q1OUVEcGUxR0RTMnVFT2tSOVZG?=
+ =?utf-8?B?bTBoN3dhUHFZME4vRkVidnpwWUp0N1U2elZWR2hEVkl3Ynp5VU1kd0JYdi9k?=
+ =?utf-8?B?cy9aZ2E3MW1UMHJSYTA1Um5sYm9nMHAzOWw0WlNZdSt3WHgwa29vbVlYN0hC?=
+ =?utf-8?B?TitIb3FReHRjUGdDb1drQVI0MmhQQ3hURXhVZml0aUVYYjhORVQvbHZUU0xr?=
+ =?utf-8?B?Z3JoNjlIV2FaSjVtblpEclhJaXArZUE2eSs3Zm9wb0k0MVBpejl0RnBoU1FM?=
+ =?utf-8?Q?zy5/N3sQ+nU6kB9k=3D?=
+MIME-Version: 1.0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB7153
+Return-Path: administrativecourtoffice.caseprogression@justice.gov.uk
+X-MS-Exchange-Organization-ExpirationStartTime: 06 Feb 2026 12:56:16.9416
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ b4ffece4-74bb-4e2b-47f2-08de657f1ddc
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 615372fc-d750-4bc9-b399-cc84f3fe3e95:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ LN2PEPF000100CD.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted:
+ LN2PEPF000100CD.GBRP265.PROD.OUTLOOK.COM
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ LN2PEPF000100CD.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ b32c5dd7-5de8-4eba-a6fc-08de657f16d3
+X-MS-Exchange-Organization-ExpirationInterval: 0:12:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: TenantCustomized
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|12012899012|6049299003|35042699022|8096899003|4013099003|4053099003|13003099007|7053199007;
+X-Forefront-Antispam-Report:
+ CIP:2a01:111:f403:c206::1;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWXP265CU008.outbound.protection.outlook.com;PTR:mail-ukwestazlp170100001.outbound.protection.outlook.com;CAT:NONE;SFS:(13230040)(12012899012)(6049299003)(35042699022)(8096899003)(4013099003)(4053099003)(13003099007)(7053199007);DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2026 12:56:16.7605
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4ffece4-74bb-4e2b-47f2-08de657f1ddc
+X-MS-Exchange-CrossTenant-Id: 615372fc-d750-4bc9-b399-cc84f3fe3e95
+X-MS-Exchange-CrossTenant-AuthSource: LN2PEPF000100CD.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB5841
+X-MS-Exchange-Transport-EndToEndLatency: 00:01:02.4829057
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.9587.013
+X-MS-Exchange-ExternalInOutlookResult: IsExternal
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910005)(944506478)(944626604)(920097)(930201)(20251009114)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?yVXBh4hm3iso2A/63mCiNaHxwBUAdUy/RDK4nkB2t5pTF4OvoVAMT1r0Ww/f?=
+ =?us-ascii?Q?PfIZqWsOS0VLuSfZoVF3IBHVI4v0NAOVBKg05ZAgmuPHiRuSZ6CHKgnvucZF?=
+ =?us-ascii?Q?h/B2F/0Dsmf080N7FT72/Evt8BMnx2yH/3Niq1LseoFA7UrOkc6ehW5wXpyC?=
+ =?us-ascii?Q?5RAg9Ll0m4gv18oZ15jMNGxwngEk9DCxfC/Nl0JeCEDEtdi0XspF6VvI8CNI?=
+ =?us-ascii?Q?WIR9jGdOjhuu40lI1N4kKVzG8enHurDbFGGDDWDHf5Nl03SPr4au2smI9KEf?=
+ =?us-ascii?Q?m/LjXUNUyUVCejT5nngfoaqxiHmu8Z97XLw2kGrkNb8+NwfA6UBaUkiMxflC?=
+ =?us-ascii?Q?81nrtAb8dYd7V8079BnjbEUAzNhMOTIY+sAVRsBfdfdtWpqApFtTHdSNitRN?=
+ =?us-ascii?Q?UBEvtpKLr3hW0ERjvlBx1a1PCKs5LZKXpR702/ios67Zq2yGMEH4LtTiaAY8?=
+ =?us-ascii?Q?pMa/zQBqfxVjE8wKzp0MOFAfws8rmdBMGNR6wPoojtlFSPNLXKS5PydZtCfB?=
+ =?us-ascii?Q?oWpjcVYDc/JsOwyALPkcqM94i3X7HAI8RU0q6DmzX/qEQZURzTV15UbpdTq2?=
+ =?us-ascii?Q?leBGyEp4BdzwhebU39CelkPQwBDRVI5aGFUAvH779iDG5uTd+Tdic9fbvof4?=
+ =?us-ascii?Q?FczQ0p8/rA24M2SQGPlYKnq1VM3yrOnbudPyE6mM6PkzC68JvT3bDMsQhtLl?=
+ =?us-ascii?Q?dZyPe/cqUD/eZWHFVy/yYhipA8U7nF4q37XR8ViBFgV47cV4ecqMPwbBxYlb?=
+ =?us-ascii?Q?obRfqcLKix6FIL3WSaFeP4eG6Kr58M6PrJrbTF0aESocut28kDmm+D3v0x5e?=
+ =?us-ascii?Q?QttU5woehttpV3ZMTtPyNKHy4HvfwnUp+meX6bmxHLjHwjrva9JFAfNDu1fS?=
+ =?us-ascii?Q?iig2eY7B2W282/l4mHs4reXGbuaoZZmyC2tMSo+vYj2ADiaq56UZNbj7+Ef7?=
+ =?us-ascii?Q?M6vLTBMec6DtDtUIX2pQ4TLn5wX97L21eExvrplbYhfZTTSZe8vj79s6Vdhl?=
+ =?us-ascii?Q?8uDGECmEbO9R5R3WYypqkKbnZXTs2XM/MlpqRi61ttHE9zcp/nu/O5ldlAGj?=
+ =?us-ascii?Q?48RvXsOk4b4saYNmI2lLTKJm90KZh7TVLLAojstUza6QZ+qoubhSl2PaH3it?=
+ =?us-ascii?Q?mLWTVEC5qg4Ng8c68hu2gH22+ZJm2K9jAxM50ShaT6fwl89x8fQtf4A0qKEK?=
+ =?us-ascii?Q?jRSSTkN6K4veGHtC+OlHPMfRRQYhk3ac5A7+2COyemZZxgYC4O5Znd19wk4O?=
+ =?us-ascii?Q?6GfP93aLYkw2GWNjfiGseCJ+o7pZeuZtW5DPg7FvOrCODQicwXf+RPppk9Cl?=
+ =?us-ascii?Q?lEt2XaWfq2HLeGcqn/h/oWM1AYoTKSB9xy7pa0gw+LLIOGCTTcWUIWtkTWAI?=
+ =?us-ascii?Q?Gyh0At58/dg9Qkh2K8tRPc7jqEHp72K7GF2YeluZ1u7hDM7akJKwkMBu06mW?=
+ =?us-ascii?Q?W1jtJDQ08MN2QH7tkYnZSJ5KSbIc/6vc3Xtp0HnV4fGQ4v82oewGrwmnWoOV?=
+ =?us-ascii?Q?aaRbeYuvyhCVqOQTLiS5moUu660AqdhX3cNWSyMUplgl5oCK0dBeJC8O2csl?=
+ =?us-ascii?Q?lvDKDF59sklGQ7ibusOOHvV17d2Kqf7VKtgGb5vHb+QeJ2QbQZmGUG0sFHSo?=
+ =?us-ascii?Q?CaqiudUwG5CePNv8bmPIHHextLgk/dkhEkS7ZJutwOfO4CE1ZRQfZYjDySBk?=
+ =?us-ascii?Q?qSydqCE3bveFFwmhxWuqGwmwJvmVXAkAvndNQwrHG4yfmx+fCYLm3nkQzl36?=
+ =?us-ascii?Q?aL5zEzuLadtxOCLRa0CC6BQ4uYGz1hkzFUWv4V9A8goeDBxheNktkhBPBzPF?=
+ =?us-ascii?Q?CelOm4D96okwfzuLCBiLo7CTu0apQXpvCHBMEMjvlUgLWIxEWXn7RlK2/9CX?=
+ =?us-ascii?Q?Fd9IZ2lYOr5Z2q2IkcewLzAFhJXOxJs6iSZnxiUq7rBLdbIHJXF3QlggBcHm?=
+ =?us-ascii?Q?GA5xgCLtfwzjugqor4jn6PKT3rTBj7E7yklItGQWNkltszJOdNlcWWOoA7De?=
+ =?us-ascii?Q?aQRQ/OTuX62oReAkSX6uVw7ZAd8Oz8wqgISYj28nYxrZ/VZQ0yO8z9BxS3LJ?=
+ =?us-ascii?Q?LjXTdCBVgfEvGTX+WkEeo1rfAf+f3/7zTWbOQVG99hEOxsII9GTgfrogC5n/?=
+ =?us-ascii?Q?gOKcLO0I95+vgmNN+dMjVDBE+IRffRw+aJCNxZzYwEAuVdxGNT+1MBTiuMKN?=
+ =?us-ascii?Q?9HtRhdKGNEukhyoj/nGIK6Bw1Y7natoQDIai8bUovsMc4bvbZoPzaDOt0UJT?=
+ =?us-ascii?Q?CJbiq5Rb7cdvAkwGgqo8h7fVCa88xOVint3Ox7CPlojbJU0kq1hmfZ4KDLmp?=
+ =?us-ascii?Q?E/AtV20AtE8Tch9ZNnveXLA0glmwnR9fX8PJag4TFa1yVoqtzrjGgmghTxet?=
+ =?us-ascii?Q?3Zvna3xe7QngEoUmo5HCAnO7seODD4ITSqvsBuIdnIsOlA0G6yEN3hGTA3pj?=
+ =?us-ascii?Q?jeYGaR6zdZmY/YWovSlYwwSZ8M1Z78ikvVULSvKyLragLx9A9xgMyRMgy6uC?=
+ =?us-ascii?Q?wCgzhManQox/afeHUN16pLM0bEq+5btOHHqm?=
+Content-type: multipart/mixed;
+	boundary="B_3853317904_1263386463"
+
+> This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--B_3853317904_1263386463
+Content-type: multipart/related;
+	boundary="B_3853317904_2138033375"
+
+--B_3853317904_2138033375
+Content-type: multipart/alternative;
+	boundary="B_3853317904_2462231188"
+
+
+--B_3853317904_2462231188
+Content-type: text/plain;
+	charset="UTF-8"
+Content-transfer-encoding: quoted-printable
+
+Dear Nadia,=20
+
+=20
+
+Apologies for the delayed reply and thank you for your six emails dating fr=
+om 16 January 2026 to 30 January 2026 of which the content and the attached =
+documents have been noted.=20
+
+=20
+
+Kindly note as of your email dated 16 January 2026 (attached) filing an app=
+lication, please note you are to produce this application on the Court form =
+N244 Application notice and provide the payment of =C2=A3313 for the court to co=
+nsider.=20
+
+=20
+
+As of this I kindly ask for you to file the correct application with fee at=
+ your earliest opportunity if you wish to proceed with your request.=20
+
+=20
+
+=20
+
+If replying by email, please use the following address:=20
+
+administrativecourtoffice.caseprogression@justice.gov.uk=20
+
+=20
+
+=20
+
+Kind regards
+
+=20
+
+Asif Bhurani
+
+Case Progression Officer | Administrative Court Office
+
+King=E2=80=99s Bench Division | HMCTS | Royal Courts of Justice | Strand, London =
+| WC2A 2LL=20
+
+Phone: 020 7947 6000
+
+Web: gov.uk/hmcts=20
+
+=20
+
+=20
+
+Here is how HMCTS uses personal data about you
+
+              =20
+
+=20
+
+From: Nadia <nadia@rosekross.com>=20
+Sent: 30 January 2026 07:35
+To: Administrative Court Office, General Office <administrativecourtoffice.=
+generaloffice@justice.gov.uk>; Administrative Court Office, Case Progression=
+ <administrativecourtoffice.caseprogression@justice.gov.uk>
+Cc: Roisin.HedigerHoward@governmentlegal.gov.uk; justicecom@parliament.uk
+Subject: AC-2025-LON-004293 =E2=80=93 Claimant=E2=80=99s Reply to Defendant=E2=80=99s Summary=
+ Grounds
+
+=20
+
+Dear Administrative Court Office,
+
+=20
+
+Please find attached the Claimant=E2=80=99s Reply to the Defendant=E2=80=99s Summary Gr=
+ounds, filed as a single consolidated document with annexes.
+
+=20
+
+The Reply addresses the jurisdictional and procedural issues raised by the =
+Defendant and is supported by the annexed neutral chronology, analytical tab=
+les, and evidential indices.
+
+=20
+
+The Defendant is copied for completeness.
+
+=20
+
+Yours faithfully,
+Nadia Zahmoul
+
+=20
+
+=20
+
+---------------------------------------------------------------------------=
+---------------------------------------------
+
+Nadia Zahmoul =20
+
+Claimant =E2=80=94 Zahmoul v Secretary of State for Justice & HMCTS =20
+
+High Court (Administrative Court) | Case Ref: AC-2025-LON-004293 =20
+
+=20
+
+Transparency Notice:
+
+A public archive of officially filed, lawfully publishable documents relati=
+ng
+
+to this Judicial Review is maintained for reference and verification purpos=
+es.
+
+ =20
+
+=20
+
+Repository: https://github.com/nadiazahmoul/JR-Zahmoul-v-SSJ-HMCTS-Archive
+
+=20
+
+No confidential or private third-party material is published.
+
+---------------------------------------------------------------------------=
+------------------------------------------------
+This e-mail and any attachments is intended only for the attention of the a=
+ddressee(s). Its unauthorised use, disclosure, storage or copying is not per=
+mitted. If you are not the intended recipient, please destroy all copies and=
+ inform the sender by return e-mail. Internet e-mail is not a secure medium.=
+ Any reply to this message could be intercepted and read by someone else. Pl=
+ease bear that in mind when deciding whether to send material in response to=
+ this message by e-mail. This e-mail (whether you are the sender or the reci=
+pient) may be monitored, recorded and retained by the Ministry of Justice. M=
+onitoring / blocking software may be used, and e-mail content may be read at=
+ any time. You have a responsibility to ensure laws are not broken when comp=
+osing or forwarding e-mails and their contents. 
+
+--B_3853317904_2462231188
+Content-type: text/html;
+	charset="UTF-8"
+Content-transfer-encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsof=
+t-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" xmlns:m=
+=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http://www.w3.org=
+/TR/REC-html40"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><meta na=
+me=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)"><!--[if !mso]><=
+style>v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style><![endif]--><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Aptos;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:12.0pt;
+	font-family:"Aptos",sans-serif;
+	mso-ligatures:standardcontextual;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#467886;
+	text-decoration:underline;}
+span.EmailStyle18
+	{mso-style-type:personal-reply;
+	font-family:"Arial",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;
+	mso-ligatures:none;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style></head><body lang=3D"EN-GB" link=3D"#467886" vlink=3D"#96607D" style=3D"=
+word-wrap:break-word"><div class=3D"WordSection1"><p class=3D"MsoNormal"><span s=
+tyle=3D"font-family:&quot;Arial&quot;,sans-serif;mso-fareast-language:EN-US">D=
+ear Nadia, <o:p></o:p></span></p><p class=3D"MsoNormal"><span style=3D"font-fami=
+ly:&quot;Arial&quot;,sans-serif;mso-fareast-language:EN-US"><o:p>&nbsp;</o:p=
+></span></p><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Arial&quot;,=
+sans-serif;mso-fareast-language:EN-US">Apologies for the delayed reply and t=
+hank you for your six emails dating from 16 January 2026 to 30 January 2026 =
+of which the content and the attached documents have been noted. <o:p></o:p>=
+</span></p><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Arial&quot;,s=
+ans-serif;mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p><p class=3D"=
+MsoNormal"><span style=3D"font-family:&quot;Arial&quot;,sans-serif;mso-fareast=
+-language:EN-US">Kindly note as of your email dated 16 January 2026 (attache=
+d) filing an application, please note you are to produce this application on=
+ the Court form N244 Application notice and provide the payment of =C2=A3313 for=
+ the court to consider. <o:p></o:p></span></p><p class=3D"MsoNormal"><span sty=
+le=3D"font-family:&quot;Arial&quot;,sans-serif;mso-fareast-language:EN-US"><o:=
+p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span style=3D"font-family:&quot=
+;Arial&quot;,sans-serif;mso-fareast-language:EN-US">As of this I kindly ask =
+for you to file the correct application with fee at your earliest opportunit=
+y if you wish to proceed with your request. <o:p></o:p></span></p><div><p cl=
+ass=3D"MsoNormal"><span style=3D"font-family:&quot;Arial&quot;,sans-serif"><o:p>=
+&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span style=3D"font-family:&quot;A=
+rial&quot;,sans-serif"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><b><=
+span style=3D"font-family:&quot;Arial&quot;,sans-serif;color:red">If replying =
+by email, please use the following address: <o:p></o:p></span></b></p><p cla=
+ss=3D"MsoNormal"><span style=3D"font-family:&quot;Arial&quot;,sans-serif"><a hre=
+f=3D"mailto:administrativecourtoffice.caseprogression@justice.gov.uk"><span st=
+yle=3D"color:blue">administrativecourtoffice.caseprogression@justice.gov.uk</s=
+pan></a> <o:p></o:p></span></p><p class=3D"MsoNormal"><span style=3D"font-size:1=
+1.0pt"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span style=3D"font-si=
+ze:11.0pt"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span style=3D"fon=
+t-family:&quot;Arial&quot;,sans-serif">Kind regards<o:p></o:p></span></p><p =
+class=3D"MsoNormal"><span style=3D"font-size:11.0pt"><o:p>&nbsp;</o:p></span></p=
+><p class=3D"MsoNormal"><b><span style=3D"font-family:&quot;Arial&quot;,sans-ser=
+if">Asif Bhurani</span></b><span style=3D"font-family:&quot;Arial&quot;,sans-s=
+erif"><o:p></o:p></span></p><p class=3D"MsoNormal"><b><span style=3D"font-family=
+:&quot;Arial&quot;,sans-serif">Case Progression Officer | Administrative Cou=
+rt Office</span></b><span style=3D"font-family:&quot;Arial&quot;,sans-serif"><=
+o:p></o:p></span></p><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Ari=
+al&quot;,sans-serif">King=E2=80=99s Bench Division <b>| </b>HMCTS <b>| </b>Royal C=
+ourts of Justice <b>| </b>Strand, London <b>| </b>WC2A 2LL <o:p></o:p></span=
+></p><p class=3D"MsoNormal"><b><span style=3D"font-family:&quot;Arial&quot;,sans=
+-serif">Phone: </span></b><span style=3D"font-family:&quot;Arial&quot;,sans-se=
+rif">020 7947 6000<o:p></o:p></span></p><p class=3D"MsoNormal"><b><span style=3D=
+"font-family:&quot;Arial&quot;,sans-serif">Web:</span></b><span style=3D"font-=
+family:&quot;Arial&quot;,sans-serif"> </span><span style=3D"font-size:11.0pt">=
+<a href=3D"http://www.gov.uk/hmcts"><span style=3D"font-size:12.0pt;font-family:=
+&quot;Arial&quot;,sans-serif;color:#0563C1">gov.uk/hmcts</span></a></span><s=
+pan style=3D"font-family:&quot;Arial&quot;,sans-serif"> <o:p></o:p></span></p>=
+<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Arial&quot;,sans-serif">=
+<o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span style=3D"font-family:&q=
+uot;Arial&quot;,sans-serif;mso-ligatures:none"><img border=3D"0" width=3D"252" h=
+eight=3D"24" style=3D"width:2.625in;height:.25in" id=3D"Picture_x0020_230" src=3D"ci=
+d:image001.png@01DC9767.F33450F0" alt=3D"HM Courts &amp; Tribunals Service log=
+o"></span><span style=3D"font-family:&quot;Arial&quot;,sans-serif"><o:p></o:p>=
+</span></p><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Arial&quot;,s=
+ans-serif"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span style=3D"fon=
+t-size:11.0pt"><a href=3D"https://www.gov.uk/government/organisations/hm-court=
+s-and-tribunals-service/about/personal-information-charter"><span style=3D"fon=
+t-size:12.0pt;font-family:&quot;Arial&quot;,sans-serif;color:#0563C1">Here i=
+s how HMCTS uses personal data about you</span></a></span><u><span style=3D"fo=
+nt-family:&quot;Arial&quot;,sans-serif;color:#0563C1"><o:p></o:p></span></u>=
+</p><p class=3D"MsoNormal" style=3D"margin-bottom:12.0pt"><span style=3D"font-size=
+:11.0pt"></span><a href=3D"https://twitter.com/HMCTSgovuk"><span style=3D"font-s=
+ize:11.0pt;color:windowtext;mso-ligatures:none;text-decoration:none"><img bo=
+rder=3D"0" width=3D"31" height=3D"31" style=3D"width:.3229in;height:.3229in" id=3D"Pic=
+ture_x0020_8" src=3D"cid:image002.jpg@01DC9767.F33450F0" alt=3D"X (formerly Twit=
+ter) logo"></span></a><span style=3D"font-size:11.0pt">&nbsp;&nbsp;&nbsp;</spa=
+n><a href=3D"https://www.linkedin.com/company/hm-courts-&amp;-tribunals-servic=
+e?utm_medium=3Demail&amp;utm_source=3D"><span style=3D"font-size:11.0pt;color:wind=
+owtext;mso-ligatures:none;text-decoration:none"><img border=3D"0" width=3D"32" h=
+eight=3D"32" style=3D"width:.3333in;height:.3333in" id=3D"Picture_x0020_4" src=3D"ci=
+d:image003.gif@01DC9767.F33450F0" alt=3D"LinkedIn"></span></a><span style=3D"fon=
+t-size:11.0pt">&nbsp;&nbsp;&nbsp;</span><a href=3D"https://public.govdelivery.=
+com/accounts/UKHMCTS/subscriber/new?qsp=3DUKHMCTS_1"><span style=3D"font-size:11=
+.0pt;color:windowtext;mso-ligatures:none;text-decoration:none"><img border=3D"=
+0" width=3D"32" height=3D"32" style=3D"width:.3333in;height:.3333in" id=3D"Picture_x=
+0020_3" src=3D"cid:image004.jpg@01DC9767.F33450F0" alt=3D"Govdelivery"></span></=
+a><span style=3D"font-size:11.0pt">&nbsp; &nbsp;</span><a href=3D"https://www.fa=
+cebook.com/HMCTSgovuk?utm_medium=3Demail&amp;utm_source=3D"><span style=3D"font-si=
+ze:11.0pt;color:windowtext;mso-ligatures:none;text-decoration:none"><img bor=
+der=3D"0" width=3D"32" height=3D"32" style=3D"width:.3333in;height:.3333in" id=3D"Pict=
+ure_x0020_2" src=3D"cid:image005.gif@01DC9767.F33450F0" alt=3D"Facebook"></span>=
+</a><span style=3D"font-size:11.0pt">&nbsp; &nbsp;</span><a href=3D"https://www.=
+gov.uk/government/organisations/hm-courts-and-tribunals-service?utm_medium=3De=
+mail&amp;utm_source=3D"><span style=3D"font-size:11.0pt;color:windowtext;mso-lig=
+atures:none;text-decoration:none"><img border=3D"0" width=3D"31" height=3D"31" sty=
+le=3D"width:.3229in;height:.3229in" id=3D"Picture_x0020_6" src=3D"cid:image006.png=
+@01DC9767.F33450F0" alt=3D"GOV.UK.  A black square with a white Crown"></span>=
+</a><span style=3D"font-size:11.0pt">&nbsp; &nbsp;</span><a href=3D"https://what=
+sapp.com/channel/0029VaCIz9dKrWQqkGTRi20R"><span style=3D"font-size:11.0pt;col=
+or:windowtext;mso-ligatures:none;text-decoration:none"><img border=3D"0" width=
+=3D"32" height=3D"32" style=3D"width:.3333in;height:.3333in" id=3D"Picture_x0020_1" =
+src=3D"cid:image007.gif@01DC9767.F33450F0" alt=3D"WhatsApp logo - A green square=
+ with a white phone in the middle. "></span></a><span style=3D"font-size:11.0p=
+t"><o:p></o:p></span></p></div><p class=3D"MsoNormal"><span style=3D"font-family=
+:&quot;Arial&quot;,sans-serif;mso-fareast-language:EN-US"><o:p>&nbsp;</o:p><=
+/span></p><div><div style=3D"border:none;border-top:solid #E1E1E1 1.0pt;paddin=
+g:3.0pt 0cm 0cm 0cm;font-size:pt"><p class=3D"MsoNormal"><b><span style=3D"font-=
+family:&quot;Calibri&quot;,sans-serif;mso-ligatures:none">From:</span></b><s=
+pan style=3D"font-family:&quot;Calibri&quot;,sans-serif;mso-ligatures:none"> N=
+adia &lt;nadia@rosekross.com&gt; <br><b>Sent:</b> 30 January 2026 07:35<br><=
+b>To:</b> Administrative Court Office, General Office &lt;administrativecour=
+toffice.generaloffice@justice.gov.uk&gt;; Administrative Court Office, Case =
+Progression &lt;administrativecourtoffice.caseprogression@justice.gov.uk&gt;=
+<br><b>Cc:</b> Roisin.HedigerHoward@governmentlegal.gov.uk; justicecom@parli=
+ament.uk<br><b>Subject:</b> AC-2025-LON-004293 =E2=80=93 Claimant=E2=80=99s Reply to Def=
+endant=E2=80=99s Summary Grounds<o:p></o:p></span></p></div></div><p class=3D"MsoNor=
+mal"><o:p>&nbsp;</o:p></p><p class=3D"MsoNormal"><span lang=3D"EN-US">Dear Admin=
+istrative Court Office,<o:p></o:p></span></p><p class=3D"MsoNormal"><span lang=
+=3D"EN-US"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US"=
+>Please find attached the Claimant=E2=80=99s Reply to the Defendant=E2=80=99s Summary Gr=
+ounds, filed as a single consolidated document with annexes.<o:p></o:p></spa=
+n></p><p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p><p=
+ class=3D"MsoNormal"><span lang=3D"EN-US">The Reply addresses the jurisdictional=
+ and procedural issues raised by the Defendant and is supported by the annex=
+ed neutral chronology, analytical tables, and evidential indices.<o:p></o:p>=
+</span></p><p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span><=
+/p><p class=3D"MsoNormal"><span lang=3D"EN-US">The Defendant is copied for compl=
+eteness.<o:p></o:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&=
+nbsp;</o:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US">Yours faithful=
+ly,<br>Nadia Zahmoul<o:p></o:p></span></p><p class=3D"MsoNormal"><span lang=3D"E=
+N-US"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US"><o=
+:p>&nbsp;</o:p></span></p><div><p class=3D"MsoNormal"><span lang=3D"EN-US" style=
+=3D"font-size:11.0pt;mso-ligatures:none">-------------------------------------=
+----------------------------------------------------------------------------=
+-------<o:p></o:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"=
+font-size:11.0pt;mso-ligatures:none">Nadia Zahmoul&nbsp; <o:p></o:p></span><=
+/p><p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:11.0pt;mso-ligat=
+ures:none">Claimant =E2=80=94 Zahmoul v Secretary of State for Justice &amp; HMCTS=
+&nbsp; <o:p></o:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"=
+font-size:11.0pt;mso-ligatures:none">High Court (Administrative Court) | Cas=
+e Ref: AC-2025-LON-004293&nbsp; <o:p></o:p></span></p><p class=3D"MsoNormal"><=
+span lang=3D"EN-US" style=3D"font-size:11.0pt;mso-ligatures:none"><o:p>&nbsp;</o=
+:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:11.0p=
+t;mso-ligatures:none">Transparency Notice:<o:p></o:p></span></p><p class=3D"Ms=
+oNormal" style=3D"line-height:150%"><span lang=3D"EN-US" style=3D"font-size:11.0pt=
+;line-height:150%;mso-ligatures:none">A public archive of officially filed, =
+lawfully publishable documents relating<o:p></o:p></span></p><p class=3D"MsoNo=
+rmal" style=3D"line-height:150%"><span lang=3D"EN-US" style=3D"font-size:11.0pt;li=
+ne-height:150%;mso-ligatures:none">to this Judicial Review is maintained for=
+ reference and verification purposes.<o:p></o:p></span></p><p class=3D"MsoNorm=
+al"><span lang=3D"EN-US" style=3D"font-size:11.0pt;mso-ligatures:none">&nbsp; <o=
+:p></o:p></span></p><p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size=
+:11.0pt;mso-ligatures:none"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"=
+><span lang=3D"EN-US" style=3D"font-size:11.0pt;mso-ligatures:none">Repository: =
+</span><span lang=3D"EN-US"><a href=3D"https://github.com/nadiazahmoul/JR-Zahmou=
+l-v-SSJ-HMCTS-Archive"><span style=3D"font-size:11.0pt;mso-ligatures:none">htt=
+ps://github.com/nadiazahmoul/JR-Zahmoul-v-SSJ-HMCTS-Archive</span></a></span=
+><span lang=3D"EN-US" style=3D"font-size:11.0pt;mso-ligatures:none"><o:p></o:p><=
+/span></p><p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:11.0pt;ms=
+o-ligatures:none"><o:p>&nbsp;</o:p></span></p><p class=3D"MsoNormal"><span lan=
+g=3D"EN-US" style=3D"font-size:11.0pt;mso-ligatures:none">No confidential or pri=
+vate third-party material is published.<o:p></o:p></span></p></div><p class=3D=
+"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:11.0pt;mso-ligatures:none">-=
+----------------------------------------------------------------------------=
+----------------------------------------------</span><span lang=3D"EN-US"><o:p=
+></o:p></span></p></div><hr>This e-mail and any attachments is intended only=
+ for the attention of the addressee(s). Its unauthorised use, disclosure, st=
+orage or copying is not permitted. If you are not the intended recipient, pl=
+ease destroy all copies and inform the sender by return e-mail. Internet e-m=
+ail is not a secure medium. Any reply to this message could be intercepted a=
+nd read by someone else. Please bear that in mind when deciding whether to s=
+end material in response to this message by e-mail. This e-mail (whether you=
+ are the sender or the recipient) may be monitored, recorded and retained by=
+ the Ministry of Justice. Monitoring / blocking software may be used, and e-=
+mail content may be read at any time. You have a responsibility to ensure la=
+ws are not broken when composing or forwarding e-mails and their contents. <=
+/body></html>
+
+--B_3853317904_2462231188--
+
+
+--B_3853317904_2138033375
+
+--B_3853317904_2138033375
+
+--B_3853317904_2138033375
+
+--B_3853317904_2138033375
+
+--B_3853317904_2138033375
+
+--B_3853317904_2138033375
+
+--B_3853317904_2138033375
+
+--B_3853317904_2138033375--
+
+
+--B_3853317904_1263386463
+
+--B_3853317904_1263386463--
+
